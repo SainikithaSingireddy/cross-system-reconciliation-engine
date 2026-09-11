@@ -2,6 +2,7 @@ from datetime import date
 from decimal import Decimal
 
 from django.test import TestCase
+from rest_framework.test import APIClient
 
 from reconciler.models import Location, SystemARecord, SystemBEntry
 from reconciler.services.comparator import find_discrepancies
@@ -89,5 +90,46 @@ class ComparatorTests(TestCase):
 
         results = find_discrepancies(org_id="ORG-TEST")
         records = [item["record"] for item in results]
+
+        self.assertNotIn("REC-OTHER", records)
+
+
+    def test_api_requires_org_id(self):
+        client = APIClient()
+
+        response = client.get("/api/discrepancies/")
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_api_tenant_isolation(self):
+        other_location = Location.objects.create(
+            location_id="LOC-OTHER",
+            org_id="ORG-OTHER",
+            location_name="Other Location",
+        )
+
+        SystemARecord.objects.create(
+            record_id="REC-OTHER",
+            location=other_location,
+            event_date=date(2026, 1, 1),
+            category_code="CAT",
+            actor_id="ACTOR-2",
+            base_value=Decimal("200.00"),
+            adjustment=Decimal("0.00"),
+            total_value=Decimal("200.00"),
+            state="ACTIVE",
+        )
+
+        client = APIClient()
+        response = client.get(
+            "/api/discrepancies/?org_id=ORG-TEST"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        records = [
+            item["record"]
+            for item in response.data["results"]
+        ]
 
         self.assertNotIn("REC-OTHER", records)

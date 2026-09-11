@@ -5,12 +5,16 @@ from reconciler.models import SystemARecord, SystemBEntry
 
 
 def normalize_ref(value):
-    """Normalize dirty record references for matching."""
+    """Normalize dirty record references into a common format."""
     if not value:
         return ""
 
-    return re.sub(r"[^a-zA-Z0-9]", "", value).lower()
+    cleaned = re.sub(r"[^a-zA-Z0-9]", "", value).lower()
 
+    if cleaned.isdigit():
+        return f"rec{cleaned}"
+
+    return cleaned
 
 def find_discrepancies(org_id=None):
     results = []
