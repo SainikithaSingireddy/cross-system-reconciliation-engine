@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 
-const API = "http://127.0.0.1:8000/api/discrepancies/";
+const API_URL = "https://cross-system-reconciliation-backend.onrender.com/api/discrepancies/";
 
 function App() {
   const [rows, setRows] = useState([]);
@@ -19,7 +19,7 @@ function App() {
       if (reason) params.reason = reason;
       if (ordering) params.ordering = ordering;
 
-      const response = await axios.get(API, { params });
+      const response = await axios.get(API_URL, { params });
       setRows(response.data.results);
     } catch (err) {
       console.error(err);
