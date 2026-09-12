@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: cross-system-reconciliation-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py migrate
+    startCommand: gunicorn core.wsgi:application
