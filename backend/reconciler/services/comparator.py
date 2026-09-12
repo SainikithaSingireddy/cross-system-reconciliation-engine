@@ -75,8 +75,16 @@ def find_discrepancies(org_id=None):
                 "record": a.record_id,
                 "location": a.location.location_id,
                 "org": a.location.org_id,
-                "system_a": str(a.total_value),
-                "system_b": str(b.value),
+                "system_a": (
+                    str(a.total_value)
+                    if a.total_value is not None
+                    else None
+                ),
+                "system_b": (
+                    str(b.value)
+                    if b.value is not None
+                    else None
+                ),
             })
 
     for key, entries in b_map.items():
