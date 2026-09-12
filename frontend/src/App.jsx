@@ -98,7 +98,6 @@ function App() {
             <option value="-system_a">System A ↓</option>
             <option value="system_b">System B ↑</option>
             <option value="-system_b">System B ↓</option>
-            <option value="system_b">System B</option>
           </select>
         </div>
       </div>
