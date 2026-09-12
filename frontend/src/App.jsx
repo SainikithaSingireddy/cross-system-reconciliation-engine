@@ -94,7 +94,10 @@ function App() {
             onChange={(e) => setOrdering(e.target.value)}
           >
             <option value="">Default</option>
-            <option value="system_a">System A</option>
+            <option value="system_a">System A ↑</option>
+            <option value="-system_a">System A ↓</option>
+            <option value="system_b">System B ↑</option>
+            <option value="-system_b">System B ↓</option>
             <option value="system_b">System B</option>
           </select>
         </div>
